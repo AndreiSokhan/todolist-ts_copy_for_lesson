@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
+import {AddItemForm} from "./components/AddItemForm";
 
 export type FilterValuesType = "all" | "active" | "completed";
 
@@ -47,9 +48,16 @@ function App() {
       setTasks({...tasks, [todolistID]: tasks[todolistID].filter(el => el.id !== taskID)})
    }
 
-   function addTask(todolistID: string, title: string) {
-      let newTask = {id: v1(), title: title, isDone: false};
+   function addTask(todolistID: string, newTitle: string) {
+      let newTask = {id: v1(), title: newTitle, isDone: false};
       setTasks({...tasks, [todolistID]: [newTask, ...tasks[todolistID]]})
+   }
+
+   const addTodolist = (newTitle: string) => {
+      let newID = v1()
+      // let newTodolist:TodolistsType = {id: newID, title: newTitle, filter: 'all'}
+      setTodolists([{id: newID, title: newTitle, filter: 'all'}, ...todolists])
+      setTasks({...tasks, [newID]: []})
    }
 
    function changeStatus(todolistID: string, taskId: string, isDone: boolean) {
@@ -63,6 +71,8 @@ function App() {
 
    return (
       <div className="App">
+         <AddItemForm callBack={addTodolist}/>
+
          {todolists.map((el) => {
             let tasksForTodolist = tasks[el.id];
             if (el.filter === "active") {
@@ -74,6 +84,7 @@ function App() {
             return (
                <Todolist
                   key={el.id}
+                  id={el.id}
                   todolistID={el.id}
                   title={el.title}
                   tasks={tasksForTodolist}
