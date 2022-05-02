@@ -60,6 +60,14 @@ function App() {
       setTasks({...tasks, [newID]: []})
    }
 
+   const updataTask = (todolistID: string, taskId: string, newTitle: string) => {
+      setTasks({...tasks, [todolistID]: tasks[todolistID].map(el => el.id === taskId ? {...el, title: newTitle} : el)})
+   }
+
+   const updateTodolistTitle = (todolistID: string, newTitle: string) => {
+      setTodolists(todolists.map(el => el.id === todolistID ? {...el, title: newTitle} : el))
+   }
+
    function changeStatus(todolistID: string, taskId: string, isDone: boolean) {
       setTasks({...tasks, [todolistID]: tasks[todolistID].map(el => el.id === taskId ? {...el, isDone: isDone} : el)})
    }
@@ -94,6 +102,8 @@ function App() {
                   changeTaskStatus={changeStatus}
                   filter={el.filter}
                   removeTodolist={removeTodolist}
+                  updataTask={updataTask}
+                  updateTodolistTitle={updateTodolistTitle}
                />
             )
          })}
